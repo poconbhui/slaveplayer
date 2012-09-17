@@ -1,0 +1,74 @@
+<html>
+<title>Slaveplayer</title>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<script type="text/javascript">
+  $(function(){
+      var command_form = $('#command_form');
+      var mplayer_input = $('#mplayer_command_input');
+      var previous_commands_list = $('#previous_commands_list');
+
+      command_form.submit(function(){
+        var mplayer_command = mplayer_input.val();
+
+        // add command to previous commands
+        var command_li = $('<li/>')
+          .text(mplayer_command)
+          .css('cursor','pointer');
+        previous_commands_list.prepend(command_li);
+
+        // make command re-runable on click
+        command_li.click(function(){
+          mplayer_input.val(command_li.text());
+          command_form.submit();
+
+          command_li.remove();
+        });
+
+        // clear input field
+        mplayer_input.val('');
+
+        // send request to server
+        $.post(
+          // url to post to
+          '/command',
+
+          // data posted
+          {"command":mplayer_command},
+
+          // function to run on sucess{
+          function(data){
+            console.log('returned');
+            console.log(data);
+          },
+
+          // data type returned from server
+          'json'
+        );
+
+        // stop form from actually submitting
+        return false;
+      });
+  });
+</script>
+
+<body>
+  <form action="/command" method="post" id="command_form">
+    <input type="text" name="command" id="mplayer_command_input" />
+    <input type="submit" value="Submit" />
+  </form>
+
+  <h3>Previous Commands</h3>
+    <ul id="previous_commands_list"></ul>
+
+  <h3>Playable Files</h3>
+    <ul>
+      <% list.forEach(function(li){ %>
+        <li>
+          <%= li %>
+        </li>
+      <% }); %>
+    </ul>
+
+</body>
+</html>
