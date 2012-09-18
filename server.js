@@ -74,5 +74,8 @@ app.get('/list', function(req, res){
 });
 
 
+// enable static files to be served from the resources directory
+app.use("/", express.static(__dirname+'/resources'));
+
 // Attach server
 app.listen(3001);

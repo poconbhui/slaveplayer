@@ -1,6 +1,6 @@
 <html>
 <title>Slaveplayer</title>
-
+<link href="/css/bootstrap.min.css" rel="stylesheet">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
 <script type="text/javascript">
   $(function(){
@@ -53,22 +53,37 @@
 </script>
 
 <body>
-  <form action="/command" method="post" id="command_form">
-    <input type="text" name="command" id="mplayer_command_input" />
-    <input type="submit" value="Submit" />
-  </form>
+	<% list.sort(function(a,b){return a > b;}) %>
+  <div class="backboard">
+	<table class="backboard_table">
+	<tr>
+	  <td><a class="btn btn-primary btn-large stop"><i class="icon-stop"</a></td>
+    <td>&nbsp;&nbsp;;&nbsp;</td>
+		<td><a class="btn btn-primary btn-large fast-backward"><i class="icon-fast-backward"</a></td>
+		<td><a class="btn btn-primary btn-large backward"><i class="icon-backward"</a></td>
+		<td><a class="btn btn-primary btn-large play"><i class="icon-play"</a></td>
+		<td><a class="btn btn-primary btn-large forward"><i class="icon-forward"</a></td>
+		<td><a class="btn btn-primary btn-large fast-forward"><i class="icon-fast-forward"</a></td>
+	</tr>
+	</table>
+	</div>
 
-  <h3>Previous Commands</h3>
-    <ul id="previous_commands_list"></ul>
+<!--	<form action="/command" method="post" id="command_form">
+<!--    <input type="text" name="command" id="mplayer_command_input" />
+<!--    <input type="submit" value="Submit" />
+<!--  </form>
 
-  <h3>Playable Files</h3>
-    <ul>
+<!--  <h3>Previous Commands</h3>
+<!--    <ul id="previous_commands_list"></ul> -->
+
       <% list.forEach(function(li){ %>
-        <li>
-          <%= li %>
-        </li>
+        <ol>
+          <a class="btn btn-primary btn-medium playme"><%= li %></a>
+        </ol>
       <% }); %>
-    </ul>
+
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/controls.js"></script>
 
 </body>
 </html>
