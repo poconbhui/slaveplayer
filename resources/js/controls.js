@@ -106,7 +106,7 @@ $(document).ready(
 			$.ajax({
 			type: "POST",
 			url: "/command",
-			data: {command: "loadfile "+$(this).html()}
+			data: {command: 'loadfile "'+$(this).html()+'"'}
 			});
 			$(".play").children(0).attr("class", "icon-pause");
   		$(".play").attr("class", "btn btn-primary btn-large pause");

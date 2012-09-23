@@ -20,7 +20,7 @@ var root_dir = process.argv[2] || process.cwd();
 var mplayer;
 
 (function bootMplayer(){
-  mplayer = spawn('mplayer', ['-slave', '-idle']);
+  mplayer = spawn('mplayer', ['-slave', '-idle', '-vfm', 'ffmpeg', '-lavdopts', 'lowres=0:fast:skiploopfilter=all', '-autosync', '30']);
 
   mplayer.stdout.on('data', function(data){
     process.stdout.write(data);
