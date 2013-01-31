@@ -2,88 +2,28 @@
 <title>Slaveplayer</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-<script type="text/javascript">
-  $(function(){
-      var command_form = $('#command_form');
-      var mplayer_input = $('#mplayer_command_input');
-      var previous_commands_list = $('#previous_commands_list');
-
-      command_form.submit(function(){
-        var mplayer_command = mplayer_input.val();
-
-        // add command to previous commands
-        var command_li = $('<li/>')
-          .text(mplayer_command)
-          .css('cursor','pointer');
-        previous_commands_list.prepend(command_li);
-
-        // make command re-runable on click
-        command_li.click(function(){
-          mplayer_input.val(command_li.text());
-          command_form.submit();
-
-          command_li.remove();
-        });
-
-        // clear input field
-        mplayer_input.val('');
-
-        // send request to server
-        $.post(
-          // url to post to
-          '/command',
-
-          // data posted
-          {"command":mplayer_command},
-
-          // function to run on sucess{
-          function(data){
-            console.log('returned');
-            console.log(data);
-          },
-
-          // data type returned from server
-          'json'
-        );
-
-        // stop form from actually submitting
-        return false;
-      });
-  });
-</script>
-
 <body>
-	<% list.sort(function(a,b){return a > b;}) %>
-  <div class="backboard">
-	<table class="backboard_table">
-	<tr>
-	  <td><a class="btn btn-primary btn-large stop"><i class="icon-stop"</a></td>
-    <td>&nbsp;&nbsp;;&nbsp;</td>
-		<td><a class="btn btn-primary btn-large fast-backward"><i class="icon-fast-backward"</a></td>
-		<td><a class="btn btn-primary btn-large backward"><i class="icon-backward"</a></td>
-		<td><a class="btn btn-primary btn-large play"><i class="icon-play"</a></td>
-		<td><a class="btn btn-primary btn-large forward"><i class="icon-forward"</a></td>
-		<td><a class="btn btn-primary btn-large fast-forward"><i class="icon-fast-forward"</a></td>
-	</tr>
+    <div class="backboard">
+        <table class="backboard_table">
+            <tr>
+	        <td><a class="btn btn-primary btn-large" id="stop"><i class="icon-stop"></i></a></td>
+                <td>&nbsp;&nbsp;&nbsp;</td>
+		<td><a class="btn btn-primary btn-large" id="backward"><i class="icon-backward"></i></a></td>
+		<td><a class="btn btn-primary btn-large" id="play"><i class="icon-play"></i></a></td>
+		<td><a class="btn btn-primary btn-large" id="forward"><i class="icon-forward"></i></a></td>
+	    </tr>
 	</table>
-	</div>
+    </div>
 
-<!--	<form action="/command" method="post" id="command_form">
-<!--    <input type="text" name="command" id="mplayer_command_input" />
-<!--    <input type="submit" value="Submit" />
-<!--  </form>
 
-<!--  <h3>Previous Commands</h3>
-<!--    <ul id="previous_commands_list"></ul> -->
-
-      <% list.forEach(function(li){ %>
+    <% list.forEach(function(li){ %>
         <ol>
-          <a class="btn btn-primary btn-medium playme"><%= li %></a>
+            <a class="btn btn-primary btn-medium playme"><%= li %></a>
         </ol>
-      <% }); %>
+    <% }); %>
 
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/controls.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/controls.js"></script>
 
 </body>
 </html>

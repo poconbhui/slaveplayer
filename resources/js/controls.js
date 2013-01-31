@@ -1,115 +1,77 @@
-var timeout;
+(function() {
 
-function play()
-{
-	$.ajax({
-		type: "POST",
-		url: "/command",
-		data: {command: "pause"}
-		});
-
-	var self = $(this);
-	self.children(0).attr("class", "icon-pause");
-  self.attr("class", "btn btn-primary btn-large pause");
-  self.unbind('click');
-  self.click(pause);
+function send_command(command) {
+    $.ajax( {
+        type: "POST",
+        url: "/command",
+        data: {command: command}
+    });
 }
 
-function pause()
-{
-		$.ajax({
-		type: "POST",
-		url: "/command",
-		data: {command: "pause"}
-		});
 
-	var self = $(this);
-	self.children(0).attr("class", "icon-play");
-  self.attr("class", "btn btn-primary btn-large play");
-  self.unbind('click');
-  self.click(play);
+// Helpers to show a play or pause button as appropriate
+function show_play() {
+    $('#play')
+        .removeClass('paused')
+        .addClass('playing')
+        .children("i")
+            .removeClass('icon-pause')
+            .addClass('icon-play');
+}
+function show_pause() {
+    $('#play')
+        .removeClass('playing')
+        .addClass('paused')
+        .children("i")
+            .removeClass('icon-play')
+            .addClass('icon-pause');
+}
+function toggle_show_play() {
+    if ($('#play').hasClass('playing')) {
+        show_pause();
+    } else {
+        show_play();
+    }
 }
 
-$(document).ready(
-	function()
-	{
-		$(".play").click
-		(
-			function(){ play.call($(this));}
-    );
-	}
-);
 
-$(document).ready(
-	function(){
-		$(".forward").mousedown(
-			function(){
-				timeout = setInterval(function(){
-				$.ajax({
-					type: "POST",
-					url: "/command",
-					data: {command: "seek +10"}
-				});},100);
-		});
+$(document).ready( function() {
+    var timeout;
+    // Play and stop buttons
+    $("#play").click(function() {
+        send_command('pause');
+        toggle_show_play();
+    });
+
+    $("#stop").click(function() {
+        send_command('stop');
+    });
+
+
+    // Fast forward and rewind
+    $("#forward").mousedown(function() {
+        timeout = setInterval(function() {
+            send_command('seek +10');
+        }, 100);
+    });
+
+    $("#backward").mousedown(function() {
+        timeout = setInterval(function() {
+            send_command('seek -10');
+        }, 100);
+    });
+
+    $(document).mouseup(function() {
+        clearInterval(timeout);
+        return false;
+    });
+
+
+    // Playable videos
+    $(".playme").click(function() {  
+        send_command('loadfile "'+$(this).text()+'"');
+        show_pause();
+    });
 });
 
-$(document).ready(
-	function(){
-		$(".backward").mousedown(
-			function(){
-				timeout = setInterval(function(){
-				$.ajax({
-					type: "POST",
-					url: "/command",
-					data: {command: "seek -10"}
-				});},100);
-		});
-});
-
-$(document).mouseup(function(){clearInterval(timeout); return false;});
-
-$(document).ready(
-	function(){
-		$(".fast-forward").click(
-			function(){ $.ajax({
-			type: "POST",
-			url: "/command",
-			data: {command: "pt_step 1 1"}
-			});
-	});
-});
-$(document).ready(
-	function(){
-		$(".fast-backward").click(
-			function(){ $.ajax({
-			type: "POST",
-			url: "/command",
-			data: {command: "pt_step -1 0"}
-			});
-		});
-});
-$(document).ready(
-	function(){
-		$(".stop").click(
-			function(){ $.ajax({
-			type: "POST",
-			url: "/command",
-			data: {command: "stop"}
-			});
-	});
-});
-
-$(document).ready(
-	function(){
-		$(".playme").click(
-			function(){ 
-			$.ajax({
-			type: "POST",
-			url: "/command",
-			data: {command: 'loadfile "'+$(this).html()+'"'}
-			});
-			$(".play").children(0).attr("class", "icon-pause");
-  		$(".play").attr("class", "btn btn-primary btn-large pause");
-	});
-});
-
+})();
